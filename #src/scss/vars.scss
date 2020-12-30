@@ -1,0 +1,31 @@
+// сетка =====================
+
+//$mnw:320px;
+//$mxw: 1170;
+//$md1:$mxw+12;
+//$md2:992.98;
+//$md3:767.98;
+//$md4:479.98;
+$mnw:320px;
+$mxw: 1170;
+$md1:$mxw+12;
+$md2:992.98;
+$md3:767.98;
+$md4:479.98;
+
+
+// цвета ======================
+$mainColor:#2b4074;
+$textColor: #4a4a4a;
+$bgColor: #f9f6e5;
+
+//  шрифты ===================
+%dosis-light {
+  font-family: "Dosis-Light";
+  font-weight: 300;
+}
+
+%roboto-medium {
+  font-family: "Roboto-Medium";
+  font-weight: 500;
+}
