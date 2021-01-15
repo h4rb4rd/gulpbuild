@@ -38,7 +38,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  min-width: $mnw;
+  min-width: $minWidth;
   position: relative;
   width: 100%;
   color: #000;
@@ -48,7 +48,7 @@ body {
   font-size: 100%;
   line-height: 1;
   font-size: 14px;
-  font-family: $ffm;
+  font-family: $fontFamily;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -56,7 +56,7 @@ body {
   &.lock {
     overflow: hiden;
 
-    @media (max-width:$md3+px) {
+    @media (max-width:$lockWidth) {
       width: 100%;
       position: fixed;
       overflow: hidden;
@@ -67,7 +67,7 @@ body {
 input,
 button,
 textarea {
-  font-family: $ffm;
+  font-family: $fontFamily;
 }
 
 input::-ms-clear {

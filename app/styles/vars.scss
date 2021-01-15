@@ -1,0 +1,33 @@
+// цвета ======================
+$mainColor:#2b4074;
+$textColor: #4a4a4a;
+$bgColor: #f9f6e5;
+
+//  шрифты @extend %Arial; ===================
+%UniSans {
+  font-family: "";
+  font-weight: 400;
+}
+
+%Play {
+  font-family: "";
+  font-weight: 400;
+}
+
+// черно-белый фильтр @extend %graystyle;
+%graystyle {
+  transition: all 0.3s ease 0s;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+  -moz-filter: grayscale(1);
+  -o-filter: grayscale(1);
+}
+
+// @extend %graystyleoff;
+%graystyleoff {
+  transition: all 0.3s ease 0s;
+  filter: grayscale(0);
+  -webkit-filter: grayscale(0);
+  -moz-filter: grayscale(0);
+  -o-filter: grayscale(0);
+}

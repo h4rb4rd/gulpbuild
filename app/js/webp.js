@@ -1,3 +1,5 @@
+// Gulp webP function ============================================
+
 function testWebP(callback) {
 
   const webP = new Image();

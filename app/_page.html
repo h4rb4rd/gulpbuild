@@ -3,8 +3,9 @@
 <html lang="ru">
 
 <!-- head -->
-@@include('_head.html')
-
+@@include('_head.html', {
+"title":"Заголовок",
+})
 
 <body>
   <!-- wrapper -->
@@ -12,18 +13,10 @@
     <!-- header -->
     @@include('_header.html')
     <!-- main -->
-    <main class="main">
-      <!-- блок 1 -->
-
-      <!-- блок 2 -->
-
-      <!-- блок 3 -->
-
-      <!-- блок 4 -->
-
-      <!-- footer -->
-      @@include('_footer.html')
-    </main>
+    <main class="page">
+	</main>
+    <!-- footer -->
+    @@include('_footer.html')
   </div>
   <!-- wrapper -->
   <!-- Подключаем скрипты и библиотеки-->
