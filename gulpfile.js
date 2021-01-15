@@ -184,7 +184,7 @@ function fontsStyle() {
           let fontname = items[i].split('.');
           fontname = fontname[0];
           if (c_fontname != fontname) {
-            fs.appendFile(`${srcFolder}/styles/fonts.scss`, '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
+            fs.appendFile(`${srcFolder}/styles/fonts.scss`, `@include font("${fontname}", "${fontname}", "400", "normal");\r\n`, cb);
           }
           c_fontname = fontname;
         }
