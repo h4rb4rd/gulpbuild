@@ -1,10 +1,8 @@
 // jshint ignore: start
 
 // задаем пути и переменные
-
 const distFolder = require('path').basename(__dirname),
   srcFolder = 'app',
-  fs = require('fs'),
   fileswatch = 'html,htm,txt,json,md,woff2';
 
 const path = {
@@ -29,9 +27,9 @@ const path = {
     img: `${srcFolder}/img/**/*.{jpg,jpeg,png,svg,gif,ico,webp}`,
   },
   clean: `./${distFolder}/`
-}
+};
 
-// Определяем константы Gulp
+// Подключаем пакеты из модулей
 const {
   src,
   dest
@@ -50,13 +48,12 @@ const {
   webp = require('gulp-webp'),
   webphtml = require('gulp-webp-html'),
   webpcss = require('gulp-webp-css'),
-  svgSprite = require('gulp-svg-sprite'),
   ttf2woff = require('gulp-ttf2woff'),
   ttf2woff2 = require('gulp-ttf2woff2'),
-  fonter = require('gulp-fonter');
+  fs = require('fs');
 
 // Подключаем Browsersync
-function browsersync() {
+const browsersync = () => {
   browserSync.init({
     server: {
       baseDir: `./${distFolder}/`
@@ -66,21 +63,19 @@ function browsersync() {
     reloadDelay: 1000,
     notify: false,
   });
-}
-
-// function reload(done){browserSync.reload(); done();};
-
+};
 
 // Подключаем html файлы
-function html() {
+const html = () => {
   return src(path.src.html)
     .pipe(fileInclude())
     .pipe(webphtml())
     .pipe(dest(path.build.html))
-    .pipe(browserSync.stream())
-}
+    .pipe(browserSync.stream());
+};
+
 // Подключаем стили
-function styles() {
+const styles = () => {
   return src(path.src.css)
     .pipe(
       scss({
@@ -100,11 +95,11 @@ function styles() {
       extname: '.min.css'
     }))
     .pipe(dest(path.build.css))
-    .pipe(browserSync.stream())
-}
+    .pipe(browserSync.stream());
+};
 
 // Подключаем js файлы
-function scripts() {
+const scripts = () => {
   return src(path.src.js)
     .pipe(fileInclude({
       prefix: '//@',
@@ -116,11 +111,11 @@ function scripts() {
       extname: '.min.js'
     }))
     .pipe(dest(path.build.js))
-    .pipe(browserSync.stream())
-}
+    .pipe(browserSync.stream());
+};
 
 // Подключаем изображения
-function images() {
+const images = () => {
   return src(path.src.img)
     .pipe(webp({
       quality: 70
@@ -136,44 +131,24 @@ function images() {
       optimizationLevel: 3 // уровень сжатия 0 до 7 
     }))
     .pipe(dest(path.build.img))
-    .pipe(browserSync.stream())
-}
+    .pipe(browserSync.stream());
+};
 
 // функция обработчик шрифтов
-function fonts() {
+const fonts = () => {
   src(path.src.fonts)
     .pipe(ttf2woff())
     .pipe(dest(path.build.fonts));
   return src(path.src.fonts)
     .pipe(ttf2woff2())
     .pipe(dest(path.build.fonts));
-}
+};
 
-// конверитуер otf в ttf (по необходимости) - gulp otf2ttf 
-gulp.task('otf2ttf', function () {
-  return gulp.src([`${srcFolder}/fonts/*.otf`])
-    .pipe(fonter({
-      formats: ['ttf']
-    }))
-    .pipe(dest(`${srcFolder}/fonts/`));
-})
-
-//  svg иконки (по необходимости) - gulp svgSprite
-gulp.task('svgSprite', function () {
-  return gulp.src([`${srcFolder}/iconsprite/*.svg`])
-    .pipe(svgSprite({
-      mode: {
-        stack: {
-          sprite: '../icons/icons.svg', // имя файла 
-          example: true
-        }
-      },
-    }))
-    .pipe(dest(path.build.img))
-})
+// call back функция для fontsStyle
+const cb = () => {};
 
 // подключаем шрифты к файлу стилей
-function fontsStyle() {
+const fontsStyle = () => {
   let fileContent = fs.readFileSync(`${srcFolder}/styles/fonts.scss`);
   if (fileContent == '') {
     fs.writeFile(`${srcFolder}/styles/fonts.scss`, '', cb);
@@ -183,21 +158,19 @@ function fontsStyle() {
         for (let i = 0; i < items.length; i++) {
           let fontname = items[i].split('.');
           fontname = fontname[0];
+          let font = fontname.split('-')[0];
           if (c_fontname != fontname) {
-            fs.appendFile(`${srcFolder}/styles/fonts.scss`, `@include font("${fontname}", "${fontname}", "400", "normal");\r\n`, cb);
+            fs.appendFile(`${srcFolder}/styles/fonts.scss`, `@include font("${font}", "${fontname}", "400", "normal");\r\n`, cb);
           }
           c_fontname = fontname;
         }
       }
-    })
+    });
   }
-}
-//  функция call back для шрифтов
-function cb() {}
-
+};
 
 // Подключаем слежку за файлами
-function watchFiles() {
+const watchFiles = () => {
   gulp.watch([path.watch.html], {
     usePolling: true
   }, html);
@@ -213,21 +186,20 @@ function watchFiles() {
   gulp.watch(`${distFolder}/**/*.{${fileswatch}}`, {
     usePolling: true
   }).on('change', browserSync.reload);
-}
+};
 
 // удаляем дистрибутив
-function clean() {
+const clean = () => {
   return del(path.clean);
-}
+};
 
-
-// Создаём новый таск "build"
-const build = gulp.series(clean, gulp.parallel(scripts, styles, html, images, fonts), fontsStyle)
+// Создаём таск "build"
+const build = gulp.series(clean, gulp.parallel(scripts, styles, html, images, fonts), fontsStyle);
 
 // Мониторим файлы
 const watch = gulp.parallel(build, watchFiles, browsersync);
 
-// Экспорт функции в таск
+// Экспорт функций в таск
 exports.fontsStyle = fontsStyle;
 exports.fonts = fonts;
 exports.images = images;

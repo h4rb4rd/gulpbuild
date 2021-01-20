@@ -26,6 +26,14 @@ $lockWidth:768px;
 //Подключение форм **************
 @import "forms.scss";
 
+
+// global options ======================================/
+body {
+  font-family: $fontFamily;
+  font-weight: 400;
+  height: 100%;
+}
+
 //Оболочка =============================================/
 .wrapper {
   width: 100%;
@@ -41,15 +49,10 @@ $lockWidth:768px;
   padding: 0px 20px;
 }
 
+
 // Хедер **************
 @import "header.scss";
 
-// global options  **************
-body {
-  font-family: $fontFamily;
-  font-weight: 400;
-  height: 100%;
-}
 
 // подключаем страницы **************
 @import "main.scss";
