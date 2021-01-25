@@ -12,3 +12,21 @@ textarea.input {
   resize: none;
   padding: 0px 0px;
 }
+
+.input {
+  &:focus::-webkit-input-placeholder {
+    color: transparent
+  }
+
+  &:focus::-moz-placeholder {
+    color: transparent
+  }
+
+  &:focus:-moz-placeholder {
+    color: transparent
+  }
+
+  &:focus:-ms-input-placeholder {
+    color: transparent
+  }
+}
