@@ -45,6 +45,7 @@ const {
   rename = require('gulp-rename'),
   uglify = require('gulp-uglify-es').default,
   imagemin = require('gulp-imagemin'),
+  pngquant = require('imagemin-pngquant'),
   webp = require('gulp-webp'),
   webphtml = require('gulp-webp-html'),
   webpcss = require('gulp-webp-css'),
@@ -122,14 +123,20 @@ const images = () => {
     }))
     .pipe(dest(path.build.img))
     .pipe(src(path.src.img))
-    .pipe(imagemin({
-      progressive: true,
-      svgoPlugins: [{
-        removeViewBox: false
-      }],
-      interlaced: true,
-      optimizationLevel: 3 // уровень сжатия 0 до 7 
-    }))
+    .pipe(imagemin([
+      imagemin.gifsicle({interlaced: true}),
+      imagemin.mozjpeg({quality: 75, progressive: true}),
+      pngquant({
+        quality: [0.7,0.9],
+        speed: 1,
+        floyd: 1
+      }),
+      imagemin.svgo({
+          plugins: [{
+            removeViewBox:false
+          }]
+        })
+     ]))
     .pipe(dest(path.build.img))
     .pipe(browserSync.stream());
 };
