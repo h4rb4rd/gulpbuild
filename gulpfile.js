@@ -51,6 +51,8 @@ const {
   webpcss = require('gulp-webp-css'),
   ttf2woff = require('gulp-ttf2woff'),
   ttf2woff2 = require('gulp-ttf2woff2'),
+  plumber = require('gulp-plumber'),
+  notify = require("gulp-notify"),
   fs = require('fs');
 
 // Подключаем Browsersync
@@ -78,6 +80,14 @@ const html = () => {
 // Подключаем стили
 const styles = () => {
   return src(path.src.css)
+  .pipe(plumber({
+    errorHandler: notify.onError((err) => {
+      return {
+        title: 'style',
+        message: err.message
+      };
+    })
+  }))
     .pipe(
       scss({
         outputStyle: 'expanded'

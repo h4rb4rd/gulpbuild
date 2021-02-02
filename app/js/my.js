@@ -324,3 +324,53 @@ function showModalByScroll() {
 }
 
 window.addEventListener('scroll', showModalByScroll);
+
+// АКТИВНЫЕ ЛИНКИ ПО УРОВНЮ СКРОЛА ===============================/
+const sections = document.querySelectorAll('section[id]');
+
+
+window.addEventListener('scroll', scrollActive);
+
+function scrollActive() {
+  const scrollY = window.pageYOffset;
+
+  sections.forEach(current => {
+    const sectionHeight = current.offsetHeight;
+    const sectionTop = current.offsetTop - 50;
+    const sectionId = current.getAttribute('id');
+
+    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+      document.querySelector(`.nav__menu a[href*=${sectionId}]`).classList.add('active');
+    } else {
+      document.querySelector(`.nav__menu a[href*=${sectionId}]`).classList.remove('active');
+    }
+  });
+}
+
+// ПЛАВНЫЙ СКРОЛ =================================================/
+const body = document.body,
+  scrollWrap = document.getElementsByClassName("smooth-scroll-wrapper")[0],
+  height = scrollWrap.getBoundingClientRect().height - 1,
+  speed = 0.04;
+
+var offset = 0;
+
+body.style.height = Math.floor(height) + "px";
+
+function smoothScroll() {
+  offset += (window.pageYOffset - offset) * speed;
+
+  var scroll = "translateY(-" + offset + "px) translateZ(0)";
+  scrollWrap.style.transform = scroll;
+
+  callScroll = requestAnimationFrame(smoothScroll);
+}
+
+smoothScroll();
+
+// FANCY BBURGER BUTTON =================================================/
+const btn = document.querySelector(".fancy-burger");
+
+btn.addEventListener("click", () => {
+  btn.querySelectorAll("span").forEach((span) => span.classList.toggle("open"));
+});
