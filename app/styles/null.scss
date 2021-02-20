@@ -54,7 +54,7 @@ body {
   -webkit-text-size-adjust: 100%;
 
   &.lock {
-    overflow: hiden;
+    overflow: hidden;
 
     @media (max-width:$lockWidth) {
       width: 100%;

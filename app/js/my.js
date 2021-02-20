@@ -216,56 +216,80 @@ const isMobile = {
 
 
 // ТАЙМЕР ========================================================/
+const timer = (container, deadline) => {
+
+  // Задаем дедлайн и получаем сколько времени осталось до конца
+  const getTimerRemaining = (endTime) => {
+
+    // разница между дедлайном и текущей датой
+    const t = Date.parse(endTime) - Date.parse(new Date()),
+
+      // считаем количество дней, часов, минут, секунд, которые непобходимо отобразить
+      seconds = Math.floor((t / 1000) % 60),
+      minutes = Math.floor((t / 1000 / 60) % 60),
+      hours = Math.floor((t / (1000 * 60 * 60)) % 24),
+      days = Math.floor((t / (1000 * 60 * 60 * 24)));
+
+    // возвращаем обьект с полученными значениями
+    return {
+      'total': t,
+      'days': days,
+      'hours': hours,
+      'minutes': minutes,
+      'seconds': seconds
+    };
+  };
+
+  // вспомогательная функция которая добавляем 0 перед значением, если оно меньше 10
+  const addZero = (num) => {
+    if (num <= 9) {
+      return '0' + num;
+    } else {
+      return num;
+    }
+  };
+
+  // помещаем определенное значение в определенный элемент на странице
+  const setClock = (selector, endTime) => {
+    const timer = document.querySelector(selector),
+      days = timer.querySelector('#days'),
+      hours = timer.querySelector('#hours'),
+      minutes = timer.querySelector('#minutes'),
+      seconds = timer.querySelector('#seconds'),
+      // запускаем посекундное обновление таймера
+      timeInterval = setInterval(updateClock, 1000);
+
+    //обновляем таймер, и скрываем данные из верстки при первом запуске
+    updateClock();
+
+    // функция для setInterval
+    function updateClock() {
+
+      // узнаем сколько времени осталось до конца (получаем обьект)
+      const t = getTimerRemaining(endTime);
+
+      // записываем значения из обьекта на страницу
+      days.textContent = addZero(t.days);
+      hours.textContent = addZero(t.hours);
+      minutes.textContent = addZero(t.minutes);
+      seconds.textContent = addZero(t.seconds);
+
+      // останавливаем таймер если дедлайн прошел
+      if (t.total <= 0) {
+        days.textContent = '00';
+        hours.textContent = '00';
+        minutes.textContent = '00';
+        seconds.textContent = '00';
+
+        clearInterval(timeInterval);
+      }
+    }
+  };
+  // Вызываем setClock
+  setClock(container, deadline);
+};
 // задаем дату окончания
 const deadline = '2021-05-20';
-// функция расчета временных промежутков
-function getTimeRemaining(endtime) {
-  const t = Date.parse(endtime) - Date.parse(new Date()),
-    days = Math.floor(t / (1000 * 60 * 60 * 24)),
-    hours = Math.floor((t / (1000 * 60 * 60) % 24)),
-    minutes = Math.floor((t / 1000 / 60) % 60),
-    seconds = Math.floor((t / 1000) % 60);
-  return {
-    'total': t,
-    'days': days,
-    'hours': hours,
-    'minutes': minutes,
-    'seconds': seconds,
-  };
-}
-// добавляем ноль к однозначным числам
-function getZero(num) {
-  if (num >= 0 && num < 10) {
-    return `0${num}`;
-  } else {
-    return num;
-  }
-}
-
-// передаем значения на страницу
-function setClock(selector, endtime) {
-  const timer = document.querySelector(selector),
-    days = timer.querySelector('#days'),
-    hours = timer.querySelector('#hours'),
-    minutes = timer.querySelector('#minutes'),
-    seconds = timer.querySelector('#seconds'),
-    timeInterval = setInterval(updateClock, 1000);
-
-  // запуск функции вручную, что бы не ждать секунду и не было мигания
-  updateClock();
-
-  function updateClock() {
-    const t = getTimeRemaining(endtime);
-    days.innerHTML = getZero(t.days);
-    hours.innerHTML = getZero(t.hours);
-    minutes.innerHTML = getZero(t.minutes);
-    seconds.innerHTML = getZero(t.seconds);
-
-    if (t.total <= 0) {
-      clearInterval(timeInterval);
-    }
-  }
-}
 setClock('.timer', deadline);
 
 // МОДАЛЬНОЕ ОКНО ================================================/
@@ -374,3 +398,15 @@ const btn = document.querySelector(".fancy-burger");
 btn.addEventListener("click", () => {
   btn.querySelectorAll("span").forEach((span) => span.classList.toggle("open"));
 });
+
+
+// OPEN BY SCROLL =======================================================/
+function openByScroll(selector) {
+  window.addEventListener('scroll', () => {
+    let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+
+    if (!btnPressed && (window.pageYOffset + document.documentElement.clientHeight >= scrollHeight)) {
+      document.querySelector(selector).click();
+    }
+  });
+}

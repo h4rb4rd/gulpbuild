@@ -80,14 +80,14 @@ const html = () => {
 // Подключаем стили
 const styles = () => {
   return src(path.src.css)
-  .pipe(plumber({
-    errorHandler: notify.onError((err) => {
-      return {
-        title: 'style',
-        message: err.message
-      };
-    })
-  }))
+    .pipe(plumber({
+      errorHandler: notify.onError((err) => {
+        return {
+          title: 'style',
+          message: err.message
+        };
+      })
+    }))
     .pipe(
       scss({
         outputStyle: 'expanded'
@@ -134,19 +134,24 @@ const images = () => {
     .pipe(dest(path.build.img))
     .pipe(src(path.src.img))
     .pipe(imagemin([
-      imagemin.gifsicle({interlaced: true}),
-      imagemin.mozjpeg({quality: 75, progressive: true}),
+      imagemin.gifsicle({
+        interlaced: true
+      }),
+      imagemin.mozjpeg({
+        quality: 75,
+        progressive: true
+      }),
       pngquant({
-        quality: [0.7,0.9],
+        quality: [0.7, 0.9],
         speed: 1,
         floyd: 1
       }),
       imagemin.svgo({
-          plugins: [{
-            removeViewBox:false
-          }]
-        })
-     ]))
+        plugins: [{
+          removeViewBox: false
+        }]
+      })
+    ]))
     .pipe(dest(path.build.img))
     .pipe(browserSync.stream());
 };
@@ -199,7 +204,7 @@ const watchFiles = () => {
   }, scripts);
   gulp.watch([path.watch.img], {
     usePolling: true
-  }, images);
+  }, (images)).on('change', browserSync.reload);
   gulp.watch(`${distFolder}/**/*.{${fileswatch}}`, {
     usePolling: true
   }).on('change', browserSync.reload);
