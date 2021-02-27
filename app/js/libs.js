@@ -1,3 +1,1 @@
-document.addEventListener('DOMContentLoaded', () => {
-  //  место для файлов
-});
+//  место для файлов
